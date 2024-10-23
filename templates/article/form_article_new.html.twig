@@ -1,0 +1,66 @@
+	<section class="bg-indigo-50 dark:bg-blue-900 h-full">
+		<div class="p-8 rounded border border-gray-200">
+			<h1 class="text-xl text-center font-bold leading-tight tracking-tight text-cyan-400 md:text-2xl dark:text-white">Création Article</h1>
+			<div>
+			<p class="text-red-500 mt-6 text-center text-sm" id='message_form_article_create'>&nbsp;</p>
+			</div>
+			{{
+				form_start(form_article_create, {
+				  attr: {
+					novalidate: "novalidate",
+					class: "space-y-4 md:space-y-6",
+					id: "create_article_form"
+				  }
+				})
+			  }}
+				
+					<div>
+						{{ form_label(form_article_create.title) }}
+						{{ form_widget(form_article_create.title) }}
+						<div class="text-sm text-red-700">
+						  {{ form_errors(form_article_create.title) }}
+						  <small id="nomError"></small>
+						</div>
+					</div>
+					<div>
+						{{ form_label(form_article_create.first_paragraphe) }}
+						{{ form_widget(form_article_create.first_paragraphe) }}
+						<div class="text-sm text-red-700">
+						  {{ form_errors(form_article_create.first_paragraphe) }}
+						  <small id="prenomError"></small>
+						</div>
+					</div>
+					<div>
+						{{ form_label(form_article_create.second_paragraphe) }}
+						{{ form_widget(form_article_create.second_paragraphe) }}
+						<div class="text-sm text-red-700">
+						  {{ form_errors(form_article_create.second_paragraphe) }}
+						  <small id="telephoneError"></small>
+						</div>
+					</div>
+					<div>
+						{{ form_label(form_article_create.third_paragraphe) }}
+						{{ form_widget(form_article_create.third_paragraphe) }}
+						<div class="text-sm text-red-700">
+						  {{ form_errors(form_article_create.third_paragraphe) }}
+						  <small id="numeroError"></small>
+						</div>
+					</div>
+				
+				<div>
+					{{ form_label(form_article_create.photos) }}
+					{{ form_widget (form_article_create.photos) }}
+					<div class="text-sm text-red-700">
+					  {{ form_errors(form_article_create.photos) }}
+					  <small id="adresseError"></small>
+					</div>
+				</div>
+	
+				<hr />
+				<div>
+					<button type="submit" class="w-25 btn-info my-0.5">{{ button_label|default('Ajouter') }}</button>
+				</div>
+				{{ form_end(form_article_create) }}
+		</div>
+	</section>
+

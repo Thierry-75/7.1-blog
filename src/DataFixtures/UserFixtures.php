@@ -48,8 +48,8 @@ class UserFixtures extends Fixture
             $article->setCreateAt(new \DateTimeImmutable())
                     ->setTitle($this->faker->sentence(3))
                     ->setFirstParagraphe($this->faker->paragraph())
-                    ->setSecondParagraph($this->faker->paragraph())
-                    ->setThirdParagraph($this->faker->paragraph())
+                    ->setSecondParagraphe($this->faker->paragraph())
+                    ->setThirdParagraphe($this->faker->paragraph())
                     ->setUser($users[mt_rand(0, count($users) -1)])
                     ->setSlug(strtolower($this->slugger->slug($article->getTitle())));
             $manager->persist($article);

@@ -1,0 +1,75 @@
+<section class="bg-indigo-50 dark:bg-blue-900 h-full">
+	<div class="p-8 rounded border border-gray-200">
+		<h1 class="text-xl text-center font-bold leading-tight tracking-tight text-cyan-400 md:text-2xl dark:text-white">Modification Article</h1>
+		<div>
+		<p class="text-red-500 mt-6 text-center text-sm" id='message_form_article_update'>&nbsp;</p>
+		</div>
+		{{
+			form_start(form_article_update, { 
+			  attr: {
+				novalidate: "novalidate",
+				class: "space-y-4 md:space-y-6",
+				id: "create_article_form"
+			  }
+			})
+		  }}
+			
+				<div>
+					{{ form_label(form_article_update.title) }}
+					{{ form_widget(form_article_update.title) }}
+					<div class="text-sm text-red-700">
+					  {{ form_errors(form_article_update.title) }}
+					  <small id="nomError"></small>
+					</div>
+				</div>
+				<div>
+					{{ form_label(form_article_update.first_paragraphe) }}
+					{{ form_widget(form_article_update.first_paragraphe) }}
+					<div class="text-sm text-red-700">
+					  {{ form_errors(form_article_update.first_paragraphe) }}
+					  <small id="prenomError"></small>
+					</div>
+				</div>
+				<div>
+					{{ form_label(form_article_update.second_paragraphe) }}
+					{{ form_widget(form_article_update.second_paragraphe) }}
+					<div class="text-sm text-red-700">
+					  {{ form_errors(form_article_update.second_paragraphe) }}
+					  <small id="telephoneError"></small>
+					</div>
+				</div>
+				<div>
+					{{ form_label(form_article_update.third_paragraphe) }}
+					{{ form_widget(form_article_update.third_paragraphe) }}
+					<div class="text-sm text-red-700">
+					  {{ form_errors(form_article_update.third_paragraphe) }}
+					  <small id="numeroError"></small>
+					</div>
+				</div>
+	
+			{% if app.request.attributes.get('_route') == 'app_article_update' %}
+					<h2>Images</h2>
+					
+					{%for photo in article.photos %}
+					<div class="">
+						<img src="{{ asset('assets/uploads/articles/mini/300x300-' ~ photo.name ) }}" alt="Photo" class="object-contain h-48 w-48"  />
+						<a href="" data-delete data-token="{{ csrf_token('delete' ~ photo.id )}}"><button class="w-25 btn-warning my-0.5">Supprimer</button></a>
+					</div>
+					{% endfor %}					
+			{% endif %}
+			<hr />
+			<div>
+				{{ form_label(form_article_update.photos) }}
+				{{ form_widget (form_article_update.photos) }}
+				<div class="text-sm text-red-700">
+				  {{ form_errors(form_article_update.photos) }}
+				  <small id="adresseError"></small>
+				</div>
+			</div>
+			<div>
+				<button type="submit" class="w-25 btn-info my-0.5">{{ button_label|default('Modifier') }}</button>
+			</div>
+			{{ form_end(form_article_update) }}
+	</div>
+</section>
+

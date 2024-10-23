@@ -32,10 +32,10 @@ class Article
     private ?string $first_paragraphe = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $second_paragraph = null;
+    private ?string $second_paragraphe = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $third_paragraph = null;
+    private ?string $third_paragraphe = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -105,26 +105,26 @@ class Article
         return $this;
     }
 
-    public function getSecondParagraph(): ?string
+    public function getSecondParagraphe(): ?string
     {
-        return $this->second_paragraph;
+        return $this->second_paragraphe;
     }
 
-    public function setSecondParagraph(string $second_paragraph): static
+    public function setSecondParagraphe(string $second_paragraph): static
     {
-        $this->second_paragraph = $second_paragraph;
+        $this->second_paragraphe = $second_paragraph;
 
         return $this;
     }
 
-    public function getThirdParagraph(): ?string
+    public function getThirdParagraphe(): ?string
     {
-        return $this->third_paragraph;
+        return $this->third_paragraphe;
     }
 
-    public function setThirdParagraph(string $third_paragraph): static
+    public function setThirdParagraphe(string $third_paragraph): static
     {
-        $this->third_paragraph = $third_paragraph;
+        $this->third_paragraphe = $third_paragraph;
 
         return $this;
     }

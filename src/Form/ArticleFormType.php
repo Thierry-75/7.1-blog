@@ -2,35 +2,86 @@
 
 namespace App\Form;
 
-use App\Entity\Article;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Article;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Sequentially;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArticleFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title',TextType::class)
-            ->add('first_paragraphe',TextareaType::class)
-            ->add('second_paragraph',TextareaType::class)
-            ->add('third_paragraph',TextareaType::class)
-            ->add('photos',FileType::class,[
+            ->add('title',TextType::class,[
+                'attr' => ['class' => 'rounded-lg bg-gray-50 border border-gray-300 text-gray-900 text-xs 
+                  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500', 'placeholder' => ''],
+                'label'=>'Titre :',
+                'label_attr'=>['class'=>'block mb-1 text-xs font-light text-gray-500 dark:text-gray-400'],
+                'constraints' => [
+                    new Sequentially([
+                        new NotBlank(message: ''),
+                        new Length(['max' =>255,'maxMessage'=>'Alphanumérique max 255  ' ]),
+                    ])
+                ]
+                   ])
+            ->add('first_paragraphe',TextareaType::class,[
+                'attr' => ['class' => 'rounded-lg bg-gray-50 border border-gray-300 text-gray-900 text-xs 
+                  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500','rows'=>4, 'placeholder' => ''],
+                'label'=>'Paragraphe 1 :',
+                'label_attr'=>['class'=>'block mb-1 text-xs font-light text-gray-500 dark:text-gray-400'],
+                'constraints' => [
+                    new Sequentially([
+                        new NotBlank(message: ''),
+                        new Length(['min' =>100,'minMessage'=>'Alphanumérique min 100' ]),
+                    ])
+                ]
+                   ])
+            ->add('second_paragraphe',TextareaType::class,[
+                'attr' => ['class' => 'rounded-lg bg-gray-50 border border-gray-300 text-gray-900 text-xs 
+                  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500','rows'=>4, 'placeholder' => ''],
+                'label'=>'Paragraphe 2 :',
+                'label_attr'=>['class'=>'block mb-1 text-xs font-light text-gray-500 dark:text-gray-400'],
+                'constraints' => [
+                    new Sequentially([
+                        new NotBlank(message: ''),
+                        new Length(['min' =>100,'minMessage'=>'Alphanumérique min 100' ]),
+                    ])
+                ]
+                   ])
+            ->add('third_paragraphe',TextareaType::class,[
+                'attr' => ['class' => 'rounded-lg bg-gray-50 border border-gray-300 text-gray-900 text-xs 
+                  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500','rows'=>4, 'placeholder' => ''],
+                'label'=>'Paragraphe 3 :',
+                'label_attr'=>['class'=>'block mb-1 text-xs font-light text-gray-500 dark:text-gray-400'],
+                'constraints' => [
+                    new Sequentially([
+                        new NotBlank(message: ''),
+                        new Length(['min' =>100,'minMessage'=>'Alphanumérique min 100' ]),
+                    ])
+                ]
+                   ])
+            ->add('photos',FileType::class,['attr'=>['class'=>'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400'],
                 'label'=>false,
+                'label_attr'=>['block mb-2 text-sm font-medium text-gray-900 dark:text-white'],
                 'multiple'=>true,
                 'mapped'=>false,
                 'required'=>false
             ])
-            ->add('submit',SubmitType::class,['attr'=>['class'=>'w-25 btn-info my-0.5']])
             ->addEventListener(FormEvents::POST_SUBMIT,$this->addDate(...))
         ;
     }

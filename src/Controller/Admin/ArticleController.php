@@ -63,16 +63,50 @@ class ArticleController extends AbstractController
             'form_article_create'=>$form_article_create->createView()
         ]);
     }
-    #[Route('/redactor/article/update', name: 'app_article_update')]
-    public function updateArticle(): Response
+    #[Route('/redactor/article/update/{id}', name: 'app_article_update',methods: ['GET','POST'])]
+    public function updateArticle(
+        Article $article, 
+        Request $request, 
+        EntityManagerInterface $em,
+        SluggerInterface $slugger,
+        ValidatorInterface $validator,
+        PhotoService $photoService
+        ): Response
     {
         if($this->denyAccessUnlessGranted('ROLE_REDACTEUR')){
             $this->addFlash('alert-danger','Vous devez être connecté pour accéder à cette page');
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('article/update.html.twig', [
-            'controller_name' => 'ArticleController',
-        ]);
+
+        $form_article_update = $this->createForm(ArticleFormType::class,$article);
+        $form_article_update->handleRequest($request);
+        if($request->isMethod('POST')){
+            $errors = $validator->validate($article);
+            if(count($errors) > 0){
+                return $this->render('/redactor/update.html.twig',['form_article_update'=>$form_article_update->createView(),'errors'=>$errors,'article'=>$article]);
+            }
+            if($form_article_update->isSubmitted() && $form_article_update->isValid()){
+                $photos = $form_article_update->get('photos')->getData();
+                foreach($photos as $photo){
+                    $folder = 'articles';
+                    $fichier = $photoService->add($photo,$folder,300,300);
+                    $photo = new Photo();
+                    $photo->setName($fichier);
+                    $article->addPhoto($photo);
+                }
+                $article->setUser($this->getUser());
+                $article->setSlug($slugger->slug($article->getTitle()));
+                try{
+                    $em->persist($article);
+                    $em->flush();
+                }catch(EntityNotFoundException $e){
+                    return $this->redirectToRoute('app_error',['exception'=>$e]);
+                }
+                $this->addFlash('alert-success','Votre article a été modifié .');
+                return $this->redirectToRoute('app_article_all');
+            }
+        }
+        return $this->render('article/update.html.twig', ['form_article_update'=>$form_article_update->createView(),'article'=>$article]);
     }
     #[Route('/redactor/article/delete', name: 'app_article_delete')]
     public function deleteArticle(): Response
