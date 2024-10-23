@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleController extends AbstractController
 {
@@ -108,7 +109,7 @@ class ArticleController extends AbstractController
         }
         return $this->render('article/update.html.twig', ['form_article_update'=>$form_article_update->createView(),'article'=>$article]);
     }
-    #[Route('/redactor/article/delete', name: 'app_article_delete')]
+    #[Route('/redactor/article/delete{id}', name: 'app_article_delete')]
     public function deleteArticle(): Response
     {
         if($this->denyAccessUnlessGranted('ROLE_ADMIN')){
@@ -119,5 +120,4 @@ class ArticleController extends AbstractController
             'controller_name' => 'ArticleController',
         ]);
     }
-
 }

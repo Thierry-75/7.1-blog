@@ -52,8 +52,7 @@
 					
 					{%for photo in article.photos %}
 					<div class="">
-						<img src="{{ asset('assets/uploads/articles/mini/300x300-' ~ photo.name ) }}" alt="Photo" class="object-contain h-48 w-48"  />
-						<a href="" data-delete data-token="{{ csrf_token('delete' ~ photo.id )}}"><button class="w-25 btn-warning my-0.5">Supprimer</button></a>
+						<img src="{{ asset('assets/uploads/articles/mini/300x300-' ~ photo.name ) }}" alt="Photo" class="object-contain h-48 w-48"/>
 					</div>
 					{% endfor %}					
 			{% endif %}
