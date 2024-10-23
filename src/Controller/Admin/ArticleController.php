@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
+use App\Entity\Photo;
 use App\Form\ArticleFormType;
+use App\Service\PhotoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +22,8 @@ class ArticleController extends AbstractController
         SluggerInterface $slugger,
         Request $request,
         ValidatorInterface $validatorInterface,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PhotoService $photoService
         ): Response
     {
         if($this->denyAccessUnlessGranted('ROLE_REDACTEUR')){
@@ -36,6 +39,14 @@ class ArticleController extends AbstractController
                 return $this->render('article/new.html.twig',['form_article_create'=>$form_article_create,'errors'=>$errors]);
             }
             if($form_article_create->isSubmitted() && $form_article_create->isValid()){
+                $photos = $form_article_create->get('photos')->getData();
+                foreach($photos as $photo){
+                    $folder = 'articles';
+                    $fichier = $photoService->add($photo,$folder,300,300);
+                    $photo = new Photo();
+                    $photo->setName($fichier);
+                    $article->addPhoto($photo);
+                }
                 $article->setUser($this->getUser());
                 $article->setSlug($slugger->slug($article->getTitle()));
                 try{
