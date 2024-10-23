@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ArticleRepository;
@@ -39,10 +41,15 @@ class Article
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
 
+    /**
+     * @var Collection<int, Photo>
+     */
+    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'article', orphanRemoval: true)]
+    private Collection $photos;
 
     public function __construct()
     {
-        
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,12 +69,12 @@ class Article
         return $this;
     }
 
-    public function getTitre(): ?string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitle(string $titre): static
     {
         $this->title = $titre;
 
@@ -130,6 +137,36 @@ class Article
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Photo>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): static
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): static
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getArticle() === $this) {
+                $photo->setArticle(null);
+            }
+        }
 
         return $this;
     }

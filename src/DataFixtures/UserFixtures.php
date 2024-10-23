@@ -8,7 +8,6 @@ use App\Entity\User;
 use Faker\Generator;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserFixtures extends Fixture
@@ -47,12 +46,12 @@ class UserFixtures extends Fixture
         for($j =0; $j < 24; $j++){
             $article = new Article();
             $article->setCreateAt(new \DateTimeImmutable())
-                    ->setTitre($this->faker->sentence(3))
+                    ->setTitle($this->faker->sentence(3))
                     ->setFirstParagraphe($this->faker->paragraph())
                     ->setSecondParagraph($this->faker->paragraph())
                     ->setThirdParagraph($this->faker->paragraph())
                     ->setUser($users[mt_rand(0, count($users) -1)])
-                    ->setSlug(strtolower($this->slugger->slug($article->getTitre())));
+                    ->setSlug(strtolower($this->slugger->slug($article->getTitle())));
             $manager->persist($article);
         }
         $manager->flush();
